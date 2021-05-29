@@ -21,13 +21,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\code\src\SimpleDisplayImg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\code\src\SimpleDisplayVideo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\code\src\OpencvTestDemo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\code\src\ImgOperate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\code\src\VideoOperate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\code\src\DrawingOperate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1628,6 +1631,12 @@
       <Filter>资源文件\image</Filter>
     </Image>
     <Image Include="..\..\..\resource\image\1.tif">
+      <Filter>资源文件\image</Filter>
+    </Image>
+    <Image Include="..\..\..\resource\image\fedora_logo.jpg">
+      <Filter>资源文件\image</Filter>
+    </Image>
+    <Image Include="..\..\..\resource\image\windows_logo.jpg">
       <Filter>资源文件\image</Filter>
     </Image>
   </ItemGroup>

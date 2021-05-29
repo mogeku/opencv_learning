@@ -133,6 +133,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\..\code\include</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,8 +145,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\code\src\SimpleDisplayImg.cpp" />
-    <ClCompile Include="..\..\..\code\src\SimpleDisplayVideo.cpp" />
+    <ClCompile Include="..\..\..\code\src\DrawingOperate.cpp" />
+    <ClCompile Include="..\..\..\code\src\ImgOperate.cpp" />
+    <ClCompile Include="..\..\..\code\src\VideoOperate.cpp" />
     <ClCompile Include="..\..\..\code\src\OpencvTestDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -683,6 +685,8 @@
     <Image Include="..\..\..\resource\image\0.png" />
     <Image Include="..\..\..\resource\image\1.jpg" />
     <Image Include="..\..\..\resource\image\1.tif" />
+    <Image Include="..\..\..\resource\image\fedora_logo.jpg" />
+    <Image Include="..\..\..\resource\image\windows_logo.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\resource\video\0.mp4" />
