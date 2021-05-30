@@ -1639,6 +1639,12 @@
     <Image Include="..\..\..\resource\image\windows_logo.jpg">
       <Filter>资源文件\image</Filter>
     </Image>
+    <Image Include="..\..\..\resource\image\1_SaltNoise.jpg">
+      <Filter>资源文件\image</Filter>
+    </Image>
+    <Image Include="..\..\..\resource\image\2.jpg">
+      <Filter>资源文件\image</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\resource\video\0.mp4">

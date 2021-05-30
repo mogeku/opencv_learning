@@ -685,6 +685,8 @@
     <Image Include="..\..\..\resource\image\0.png" />
     <Image Include="..\..\..\resource\image\1.jpg" />
     <Image Include="..\..\..\resource\image\1.tif" />
+    <Image Include="..\..\..\resource\image\1_SaltNoise.jpg" />
+    <Image Include="..\..\..\resource\image\2.jpg" />
     <Image Include="..\..\..\resource\image\fedora_logo.jpg" />
     <Image Include="..\..\..\resource\image\windows_logo.jpg" />
   </ItemGroup>

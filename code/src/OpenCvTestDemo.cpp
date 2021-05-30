@@ -18,11 +18,18 @@ int main()
     //TestReverseColor(u8R"(..\..\..\resource\image\0.png)");
     //TestBlendImg(u8R"(..\..\..\resource\image\fedora_logo.jpg)", u8R"(..\..\..\resource\image\windows_logo.jpg)");
     //TestAdjContrastAndLight(u8R"(..\..\..\resource\image\0.png)");
+    //TestAddSaltNoise(u8R"(..\..\..\resource\image\2.jpg)");
+    //TestMedianFilter(u8R"(..\..\..\resource\image\1_SaltNoise.jpg)");
+    //TestBilateralFilter(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestDilateAndErode(u8R"(..\..\..\resource\image\2_SaltNoise.jpg)");
+    //TestOpenAndClose(u8R"(..\..\..\resource\image\2_SaltNoise.jpg)");
+    //TestMorphGradint(u8R"(..\..\..\resource\image\1.jpg)");
+    TestMorphTopAndBlackHat(u8R"(..\..\..\resource\image\2_SaltNoise.jpg)");
 
     //TestDisplayVideo(u8R"(..\..\..\resource\video\0.mp4)");
     //TestDisplayVideoEx(u8R"(..\..\..\resource\video\0.mp4)");
     //TestDisplayCamera();
 
     //TestDrawShapAndText();
-    TestRandomLine();
+    //TestRandomLine();
 }

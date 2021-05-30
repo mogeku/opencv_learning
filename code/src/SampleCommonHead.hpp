@@ -10,6 +10,13 @@ void TestCreateMat(const char* file_path);
 void TestReverseColor(const char* file_path);
 void TestBlendImg(const char* file_path1, const char* file_path2);
 void TestAdjContrastAndLight(const char* file_path);
+void TestAddSaltNoise(const char* file_path);
+void TestMedianFilter(const char* file_path);
+void TestBilateralFilter(const char* file_path);
+void TestDilateAndErode(const char* file_path);
+void TestOpenAndClose(const char* file_path);
+void TestMorphGradint(const char* file_path);
+void TestMorphTopAndBlackHat(const char* file_path);
 
 void TestDisplayVideo(const char* file_path);
 void TestDisplayVideoEx(const char* file_path);

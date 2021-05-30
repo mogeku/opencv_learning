@@ -1,6 +1,7 @@
 #include "SampleCommonHead.hpp"
 
 #include <iostream>
+#include <random>
 #include <opencv2/opencv.hpp>
 
 void TestDisplayImg(const char* file_path)
@@ -28,8 +29,9 @@ void TestDisplayImgWithBlur(const char* file_path)
     cv::imshow("Example2_5-in", img);
 
     cv::Mat out;
-    cv::GaussianBlur(img, out, cv::Size(5, 5), 3, 3);
-    cv::GaussianBlur(out, out, cv::Size(5, 5), 3, 3);
+    //cv::blur(img, out, cv::Size(7, 7));
+    cv::GaussianBlur(img, out, cv::Size(5, 5), 0.1, 0.1);
+    //cv::GaussianBlur(out, out, cv::Size(5, 5), 3, 3);
 
     cv::imshow("Example2_5-out", out);
 
@@ -295,5 +297,195 @@ void TestAdjContrastAndLight(const char* file_path)
 
     dst.convertTo(dst, CV_8UC3);
     cv::imshow("output", dst);
+    cv::waitKey(0);
+}
+
+void TestAddSaltNoise(const char* file_path)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    int rows = src.rows;
+    int cols = src.cols;
+    int cn = src.channels();
+
+    int noise_num = gen() % (rows * cols / 256);
+    //int noise_num = 50;
+
+    for (int i = 0; i < noise_num; ++i)
+    {
+        int row = gen() % rows;
+        int col = gen() % cols;
+
+        uchar* p = src.ptr<uchar>(row);
+        for (int c = 0; c < (cn > 3 ? 3 : cn); ++c)
+        {
+            //p[col * cn + c] = gen() % 2 ? 255 : 0;
+            p[col * cn + c] = 255;
+        }
+    }
+    cv::imshow("out", src);
+
+    std::string save_path(file_path);
+    std::size_t dot_pos = save_path.rfind('.');
+    save_path = save_path.substr(0, dot_pos) + "_SaltNoise" + save_path.substr(dot_pos);
+    cv::imwrite(save_path, src);
+    
+    cv::waitKey(0);
+}
+
+void TestMedianFilter(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+    cv::medianBlur(src, dst, 5);
+
+    cv::imshow("dst", dst);
+    cv::waitKey(0);
+}
+
+void TestBilateralFilter(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+
+    cv::GaussianBlur(src, dst, cv::Size(5, 5), 10, 10);
+    cv::imshow("Gaussian Blur", dst);
+
+    cv::bilateralFilter(src, dst, 0, 100, 2);
+    cv::imshow("Bilateral Filter", dst);
+
+    cv::Matx<int, 3, 3> mask(0, -1, 0, -1, 5, -1, 0, -1, 0);
+    cv::filter2D(dst, dst, dst.depth(), mask);
+    cv::imshow("Result", dst);
+
+    cv::waitKey(0);
+}
+
+void ElementTrackbarCallback(int pos, void* src)
+{
+    int s = pos * 2 + 1;
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(s, s));
+
+    cv::Mat dst;
+    cv::dilate(*(cv::Mat*)src, dst, kernel);
+    cv::imshow("Dilate", dst);
+    cv::erode(*(cv::Mat*)src, dst, kernel);
+    cv::imshow("Erode", dst);
+}
+void TestDilateAndErode(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    int pos = 0;
+    cv::namedWindow("Dilate", cv::WINDOW_AUTOSIZE);
+    cv::createTrackbar("Element size", "Dilate", &pos, 20, ElementTrackbarCallback, &src);
+    ElementTrackbarCallback(pos, &src);
+
+    cv::waitKey(0);
+}
+
+void TestOpenAndClose(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(15, 15));
+
+    cv::morphologyEx(src, dst, cv::MORPH_OPEN, kernel);
+    cv::imshow("open", dst);
+
+    cv::morphologyEx(src, dst, cv::MORPH_CLOSE, kernel);
+    cv::imshow("close", dst);
+
+    cv::waitKey(0);
+}
+
+void MorphGradintTrackbarCallback(int pos, void* src)
+{
+    int s = pos * 2 + 1;
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(s, s));
+
+    cv::Mat dst;
+    cv::morphologyEx(*(cv::Mat*)src, dst, cv::MORPH_GRADIENT, kernel);
+    cv::imshow("Gradient", dst);
+}
+void TestMorphGradint(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    int pos = 0;
+    MorphGradintTrackbarCallback(pos, &src);
+    cv::createTrackbar("Size", "Gradient", &pos, 20, MorphGradintTrackbarCallback, &src);
+
+    cv::waitKey(0);
+}
+
+void MorphTopAndBlackHatTrackbarCallback(int pos, void* src)
+{
+    int s = pos * 2 + 1;
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(s, s));
+
+    cv::Mat dst;
+    cv::morphologyEx(*(cv::Mat*)src, dst, cv::MORPH_TOPHAT, kernel);
+    cv::imshow("Top Hat", dst);
+
+    cv::morphologyEx(*(cv::Mat*)src, dst, cv::MORPH_BLACKHAT, kernel);
+    cv::imshow("Black Hat", dst);
+}
+void TestMorphTopAndBlackHat(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    int pos = 0;
+    MorphTopAndBlackHatTrackbarCallback(pos, &src);
+    cv::createTrackbar("Size", "Top Hat", &pos, 20, MorphTopAndBlackHatTrackbarCallback, &src);
+
     cv::waitKey(0);
 }
