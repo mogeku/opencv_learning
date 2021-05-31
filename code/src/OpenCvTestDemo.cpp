@@ -26,7 +26,10 @@ int main()
     //TestMorphGradint(u8R"(..\..\..\resource\image\1.jpg)");
     //TestMorphTopAndBlackHat(u8R"(..\..\..\resource\image\2_SaltNoise.jpg)");
     //TestExtractLineAndText(u8R"(..\..\..\resource\image\4.png)");
-    TestPyrUpAndDown(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestPyrUpAndDown(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestThreshold(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestConvolution(u8R"(..\..\..\resource\image\1.jpg)");
+    TestDealBorder(u8R"(..\..\..\resource\image\1.jpg)");
 
     //TestDisplayVideo(u8R"(..\..\..\resource\video\0.mp4)");
     //TestDisplayVideoEx(u8R"(..\..\..\resource\video\0.mp4)");

@@ -19,6 +19,9 @@ void TestMorphGradint(const char* file_path);
 void TestMorphTopAndBlackHat(const char* file_path);
 void TestExtractLineAndText(const char* file_path);
 void TestPyrUpAndDown(const char* file_path);
+void TestThreshold(const char* file_path);
+void TestConvolution(const char* file_path);
+void TestDealBorder(const char* file_path);
 
 void TestDisplayVideo(const char* file_path);
 void TestDisplayVideoEx(const char* file_path);

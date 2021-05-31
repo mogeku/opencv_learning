@@ -540,6 +540,7 @@ void TestPyrUpAndDown(const char* file_path)
     cv::imshow("PyrDown", dst);
 
     //Dog
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
     cv::Mat img_dog1, img_dog2;
     cv::GaussianBlur(dst, img_dog1, { 3, 3 }, 0, 0);
     cv::GaussianBlur(dst, img_dog2, { 5, 5 }, 0, 0);
@@ -547,6 +548,111 @@ void TestPyrUpAndDown(const char* file_path)
 
     cv::normalize(dst, dst, 255, 0, cv::NORM_MINMAX);
     cv::imshow("DOG", dst);
+
+    cv::waitKey(0);
+}
+
+struct ThresholdArgs
+{
+    cv::Mat* src;
+    bool is_type;
+};
+void ThresholdTrackbarCallback(int pos, void* args)
+{
+    ThresholdArgs* param = (ThresholdArgs*)args;
+    cv::Mat* src = param->src;
+    static double thresh = 127;
+    static int type = cv::THRESH_BINARY;
+
+    if (param->is_type) type = pos; else thresh = pos;
+
+    cv::Mat dst;
+    cv::cvtColor(*src, dst, cv::COLOR_BGR2GRAY);
+    //cv::threshold(dst, dst, thresh, 255, type);
+    //cv::threshold(dst, dst, thresh, 255, type | cv::THRESH_OTSU);
+    cv::threshold(dst, dst, thresh, 255, type | cv::THRESH_TRIANGLE);
+    cv::imshow("result", dst);
+}
+void TestThreshold(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::namedWindow("result", cv::WINDOW_AUTOSIZE);
+    ThresholdArgs param1 = { &src, false};
+    ThresholdArgs param2 = { &src, true };
+    cv::createTrackbar("Thresh Value", "result", NULL, 255, ThresholdTrackbarCallback, &param1);
+    cv::createTrackbar("Thresh Type", "result", NULL, 4, ThresholdTrackbarCallback, &param2);
+
+    cv::waitKey(0);
+}
+
+void TestConvolution(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Matx<int, 2, 2> k_rebert_x(1, 0, 0, -1);
+    cv::Matx<int, 2, 2> k_rebert_y(0, 1, -1, 0);
+    cv::Matx<int, 3, 3> k_sobel_x(-1, 0, 1, -2, 0, 2, -1, 0, 1);
+    cv::Matx<int, 3, 3> k_sobel_y(-1, -2, -1, 0, 0, 0, 1, 2, 1);
+    cv::Matx<int, 3, 3> k_laplace(0, -1, 0, -1, 4, -1, 0, -1, 0);
+
+    cv::Mat dst;
+    cv::filter2D(src, dst, src.depth(), k_rebert_x);
+    cv::imshow("Rebert x", dst);
+    cv::filter2D(src, dst, src.depth(), k_rebert_y);
+    cv::imshow("Rebert y", dst);
+    cv::filter2D(src, dst, src.depth(), k_sobel_x);
+    cv::imshow("Sobel x", dst);
+    cv::filter2D(src, dst, src.depth(), k_sobel_y);
+    cv::imshow("Sobel y", dst);
+    cv::filter2D(src, dst, src.depth(), k_laplace);
+    cv::imshow("Laplace", dst);
+
+    int ksize = 0;
+    int index = 0;
+    while (true)
+    {
+        ksize = 4 + (index++ % 8) * 2 + 1;
+        cv::Mat k_blur = cv::Mat::ones({ ksize, ksize }, CV_32F) / ((float)ksize * (float)ksize);
+        cv::filter2D(src, dst, src.depth(), k_blur);
+        cv::imshow("Custom blur", dst);
+
+        if (27 == cv::waitKey(500))
+            break;
+    }
+}
+
+void TestDealBorder(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+    cv::copyMakeBorder(src, dst, 20, 20, 20, 20, cv::BORDER_DEFAULT);
+    cv::imshow("Border default", dst);
+    cv::copyMakeBorder(src, dst, 20, 20, 20, 20, cv::BORDER_REPLICATE);
+    cv::imshow("Border replicate", dst);
+    cv::copyMakeBorder(src, dst, 20, 20, 20, 20, cv::BORDER_CONSTANT, { 255, 100, 255 });
+    cv::imshow("Border constant", dst);
+    cv::copyMakeBorder(src, dst, 20, 20, 20, 20, cv::BORDER_WRAP);
+    cv::imshow("Border wrap", dst);
 
     cv::waitKey(0);
 }
