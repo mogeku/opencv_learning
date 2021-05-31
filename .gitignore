@@ -1,3 +1,5 @@
 ide/vs2019/BuildOpencv
 ide/vs2019/OpencvTestDemo/OpencvTestDemo.dir
+ide/vs2017/OpencvTestDemo/OpencvTestDemo.dir
+ide/vs2017/BuildOpencv
 bin/

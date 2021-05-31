@@ -17,6 +17,8 @@ void TestDilateAndErode(const char* file_path);
 void TestOpenAndClose(const char* file_path);
 void TestMorphGradint(const char* file_path);
 void TestMorphTopAndBlackHat(const char* file_path);
+void TestExtractLineAndText(const char* file_path);
+void TestPyrUpAndDown(const char* file_path);
 
 void TestDisplayVideo(const char* file_path);
 void TestDisplayVideoEx(const char* file_path);

@@ -489,3 +489,64 @@ void TestMorphTopAndBlackHat(const char* file_path)
 
     cv::waitKey(0);
 }
+
+void TestExtractLineAndText(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat img_gray, img_bin, dst;
+    cv::cvtColor(src, img_gray, cv::COLOR_BGR2GRAY);
+    cv::imshow("gray", img_gray);
+
+    cv::adaptiveThreshold(img_gray, img_bin, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 7, 2);
+    //cv::threshold(img_gray, img_bin, 127, 255, cv::THRESH_BINARY_INV);
+    cv::imshow("binary", img_bin);
+
+    cv::Mat hline = cv::getStructuringElement(cv::MORPH_RECT, { 7, 1 });
+    cv::Mat vline = cv::getStructuringElement(cv::MORPH_RECT, { 1, 3 });
+    cv::Mat rect = cv::getStructuringElement(cv::MORPH_RECT, { 3, 3 });
+
+    //cv::erode(img_bin, dst, rect);
+    //cv::dilate(dst, dst, vline);
+    cv::morphologyEx(img_bin, dst, cv::MORPH_OPEN, rect);
+    cv::bitwise_not(dst, dst);
+    //cv::blur(dst, dst, { 3, 3 });
+    cv::imshow("result", dst);
+
+    cv::waitKey(0);
+}
+
+void TestPyrUpAndDown(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+    cv::pyrUp(src, dst);
+    cv::imshow("PyrUp", dst);
+
+    cv::pyrDown(src, dst);
+    cv::imshow("PyrDown", dst);
+
+    //Dog
+    cv::Mat img_dog1, img_dog2;
+    cv::GaussianBlur(dst, img_dog1, { 3, 3 }, 0, 0);
+    cv::GaussianBlur(dst, img_dog2, { 5, 5 }, 0, 0);
+    cv::subtract(img_dog1, img_dog2, dst);
+
+    cv::normalize(dst, dst, 255, 0, cv::NORM_MINMAX);
+    cv::imshow("DOG", dst);
+
+    cv::waitKey(0);
+}
