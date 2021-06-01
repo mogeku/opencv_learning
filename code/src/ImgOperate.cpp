@@ -746,3 +746,62 @@ void TestCanny(const char* file_path)
 
     cv::waitKey(0);
 }
+
+struct HoughlineData
+{
+    int type;
+    cv::Mat* src;
+    cv::Mat* dst;
+};
+void HoughLineTrackbarCallback(int pos, void* data)
+{
+    HoughlineData* param = (HoughlineData*)data;
+    static int thresh = 10;
+    static int min_len = 10;
+    static int max_gap = 10;
+    if (0 == param->type)
+        thresh = pos;
+    else if (1 == param->type)
+        min_len = pos;
+    else
+        max_gap = pos;
+
+    std::vector<cv::Vec4f> lines;
+    cv::HoughLinesP(*(param->dst), lines, 1.0, CV_PI / 180.0, thresh, min_len, max_gap);
+
+    cv::Mat ret;
+    (param->src)->copyTo(ret);
+    for (cv::Vec4f& line : lines)
+    {
+        cv::line(ret, { (int)line[0], (int)line[1] }, { (int)line[2], (int)line[3] }, { 255, 0, 255 }, 1, cv::LINE_AA);
+    }
+    cv::imshow("Houghline", ret);
+}
+void TestHoughLine(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst;
+    cv::GaussianBlur(src, dst, { 5, 5 }, 0, 0);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+    cv::Canny(dst, dst, 25, 50);
+    cv::imshow("edges", dst);
+
+    HoughlineData param{ 0, &src, &dst };
+    HoughlineData param1{ 1, &src, &dst };
+    HoughlineData param2{ 2, &src, &dst };
+    HoughLineTrackbarCallback(10, &param);
+    cv::namedWindow("Houghline");
+
+    cv::createTrackbar("thresh", "Houghline", NULL, 200, HoughLineTrackbarCallback, &param);
+    cv::createTrackbar("min_len", "Houghline", NULL, 200, HoughLineTrackbarCallback, &param1);
+    cv::createTrackbar("max_gap", "Houghline", NULL, 200, HoughLineTrackbarCallback, &param2);
+
+    cv::waitKey(0);
+}

@@ -25,6 +25,7 @@ void TestDealBorder(const char* file_path);
 void TestSobel(const char* file_path);
 void TestLaplacian(const char* file_path);
 void TestCanny(const char* file_path);
+void TestHoughLine(const char* file_path);
 
 void TestDisplayVideo(const char* file_path);
 void TestDisplayVideoEx(const char* file_path);

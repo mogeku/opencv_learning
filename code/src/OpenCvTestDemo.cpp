@@ -32,7 +32,8 @@ int main()
     //TestDealBorder(u8R"(..\..\..\resource\image\1.jpg)");
     //TestSobel(u8R"(..\..\..\resource\image\1.jpg)");
     //TestLaplacian(u8R"(..\..\..\resource\image\1.jpg)");
-    TestCanny(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestCanny(u8R"(..\..\..\resource\image\1.jpg)");
+    TestHoughLine(u8R"(..\..\..\resource\image\4.jpg)");
 
     //TestDisplayVideo(u8R"(..\..\..\resource\video\0.mp4)");
     //TestDisplayVideoEx(u8R"(..\..\..\resource\video\0.mp4)");
