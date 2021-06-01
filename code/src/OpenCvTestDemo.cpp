@@ -29,7 +29,10 @@ int main()
     //TestPyrUpAndDown(u8R"(..\..\..\resource\image\1.jpg)");
     //TestThreshold(u8R"(..\..\..\resource\image\1.jpg)");
     //TestConvolution(u8R"(..\..\..\resource\image\1.jpg)");
-    TestDealBorder(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestDealBorder(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestSobel(u8R"(..\..\..\resource\image\1.jpg)");
+    //TestLaplacian(u8R"(..\..\..\resource\image\1.jpg)");
+    TestCanny(u8R"(..\..\..\resource\image\1.jpg)");
 
     //TestDisplayVideo(u8R"(..\..\..\resource\video\0.mp4)");
     //TestDisplayVideoEx(u8R"(..\..\..\resource\video\0.mp4)");

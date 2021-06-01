@@ -656,3 +656,93 @@ void TestDealBorder(const char* file_path)
 
     cv::waitKey(0);
 }
+
+void TestSobel(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst, sobel_x, sobel_y, sobel_xy;
+    cv::GaussianBlur(src, dst, { 3, 3 }, 0, 0);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+
+    cv::Sobel(dst, sobel_x, -1, 1, 0);
+    cv::Sobel(dst, sobel_y, -1, 0, 1);
+    cv::imshow("Sobel x", sobel_x);
+    cv::imshow("Sobel y", sobel_y);
+
+    //cv::Scharr(dst, sobel_x, CV_16S, 1, 0);
+    //cv::Scharr(dst, sobel_y, CV_16S, 0, 1);
+    cv::Sobel(dst, sobel_x, CV_16S, 1, 0);
+    cv::Sobel(dst, sobel_y, CV_16S, 0, 1);
+    cv::convertScaleAbs(sobel_x, sobel_x);
+    cv::convertScaleAbs(sobel_y, sobel_y);
+    cv::imshow("Dealed Sobel x", sobel_x);
+    cv::imshow("Dealed Sobel y", sobel_y);
+
+    cv::add(sobel_x, sobel_y, sobel_xy);
+    cv::imshow("Final result1", sobel_xy);
+    cv::addWeighted(sobel_x, 0.5, sobel_y, 0.5, 0, sobel_xy);
+    cv::imshow("Final result2", sobel_xy);
+
+    cv::waitKey(0);
+}
+
+void TestLaplacian(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    cv::Mat dst, laplacian;
+    cv::GaussianBlur(src, dst, { 3, 3 }, 0, 0);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+
+    cv::Laplacian(dst, laplacian, -1, 3);
+    cv::imshow("Laplacian", laplacian);
+
+    cv::Laplacian(dst, laplacian, CV_16S, 3);
+    cv::convertScaleAbs(laplacian, laplacian);
+    cv::threshold(laplacian, laplacian, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+    cv::imshow("Dealed Laplacian", laplacian);
+
+    cv::waitKey(0);
+}
+
+void CannyTrackbarCallback(int pos, void* data)
+{
+    cv::Mat* src = (cv::Mat*)data;
+
+    cv::Mat dst, edges, gray;
+    cv::blur(*src, gray, { 3, 3 });
+    cv::cvtColor(*src, gray, cv::COLOR_BGR2GRAY);
+    cv::Canny(gray, edges, pos, pos * 2);
+
+    dst.create(src->size(), src->type());
+    src->copyTo(dst, edges);
+    cv::imshow("dst", dst);
+}
+void TestCanny(const char* file_path)
+{
+    cv::Mat src = cv::imread(file_path, -1);
+    if (src.empty())
+    {
+        printf("imread failed\n");
+        return;
+    }
+    cv::imshow("src", src);
+
+    CannyTrackbarCallback(0, &src);
+    cv::createTrackbar("Canny thresh", "dst", NULL, 255, CannyTrackbarCallback, &src);
+
+    cv::waitKey(0);
+}
